@@ -12,9 +12,10 @@ interface BugRow {
   severity: string;
   owner: string;
   state: string;
+  creator: string;
 }
 
-type SortColumn = "id" | "severity" | "title" | "owner";
+type SortColumn = "id" | "severity" | "title" | "owner" | "creator";
 type SortDirection = "asc" | "desc";
 
 /** Severity priority for sort: LOW=0, MID=1, HIGH=2 (ascending = LOW then MID then HIGH). */
@@ -69,6 +70,9 @@ function sortBugs(bugs: BugRow[], column: SortColumn, direction: SortDirection):
         break;
       case "owner":
         cmp = a.owner.localeCompare(b.owner);
+        break;
+      case "creator":
+        cmp = a.creator.localeCompare(b.creator);
         break;
     }
     return direction === "asc" ? cmp : -cmp;
@@ -133,6 +137,7 @@ export function BoardPage() {
           severity: string;
           owner: string;
           state: string;
+          creator: string;
         }>;
         setBugs(data);
       }
@@ -237,24 +242,36 @@ export function BoardPage() {
                         </span>
                       </button>
                     </th>
+                    <th className="px-4 py-3 w-40" scope="col" aria-sort={sortColumn === "creator" ? (sortDirection === "asc" ? "ascending" : "descending") : undefined}>
+                      <button
+                        type="button"
+                        onClick={() => handleSortHeader("creator")}
+                        className="flex items-center gap-1 hover:text-stone-800 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1 rounded"
+                      >
+                        Creator
+                        <span className="inline-block w-4 text-center" aria-hidden="true">
+                          {sortColumn === "creator" ? (sortDirection === "asc" ? "↑" : "↓") : " "}
+                        </span>
+                      </button>
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   {loading ? (
                     <tr>
-                      <td colSpan={4} className="px-4 py-6 text-center text-stone-500">
+                      <td colSpan={5} className="px-4 py-6 text-center text-stone-500">
                         Loading…
                       </td>
                     </tr>
                   ) : sortedBugs.length === 0 && bugs.length > 0 ? (
                     <tr>
-                      <td colSpan={4} className="px-4 py-6 text-center text-stone-500">
+                      <td colSpan={5} className="px-4 py-6 text-center text-stone-500">
                         No bugs matched.
                       </td>
                     </tr>
                   ) : sortedBugs.length === 0 ? (
                     <tr>
-                      <td colSpan={4} className="px-4 py-6 text-center text-stone-500">
+                      <td colSpan={5} className="px-4 py-6 text-center text-stone-500">
                         No bugs.
                       </td>
                     </tr>
@@ -284,6 +301,7 @@ export function BoardPage() {
                         </td>
                         <td className="px-4 py-3 text-stone-800">{bug.title}</td>
                         <td className="px-4 py-3 text-stone-600">{bug.owner}</td>
+                        <td className="px-4 py-3 text-stone-600">{bug.creator}</td>
                       </tr>
                     ))
                   )}
@@ -296,6 +314,7 @@ export function BoardPage() {
       <CreateBugModal
         isOpen={createModalOpen}
         defaultOwner={user?.username ?? ""}
+        creator={user?.username ?? ""}
         onClose={() => setCreateModalOpen(false)}
         onSaved={fetchBugs}
       />

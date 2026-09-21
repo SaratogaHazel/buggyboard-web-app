@@ -5,6 +5,8 @@ export type Severity = "high" | "mid" | "low";
 interface CreateBugModalProps {
   isOpen: boolean;
   defaultOwner: string;
+  /** Username of the logged-in user; recorded as the bug's creator. Not shown in the form. */
+  creator: string;
   onClose: () => void;
   onSaved: () => void;
 }
@@ -18,6 +20,7 @@ function severitySelectClass(severity: Severity): string {
 export function CreateBugModal({
   isOpen,
   defaultOwner,
+  creator,
   onClose,
   onSaved,
 }: CreateBugModalProps) {
@@ -80,6 +83,7 @@ export function CreateBugModal({
           severity,
           owner: owner.trim(),
           description: description.trim(),
+          creator,
         }),
       });
       if (res.ok) {
