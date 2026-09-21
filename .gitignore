@@ -147,3 +147,5 @@ vite.config.ts.timestamp-*
 
 # SQLite database (single file, no env-specific DBs)
 backend/data
+# Playwright CLI output (may contain credentials)
+.playwright-cli/
