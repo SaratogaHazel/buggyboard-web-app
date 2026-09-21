@@ -14,7 +14,10 @@ if (!existsSync(dataDir)) {
 const dbPath = join(dataDir, "buggyboard.db");
 export const db = new Database(dbPath);
 
-/** Ensure bugs table exists. Severity is HIGH, MID, LOW. State is OPEN, CLOSED. */
+/**
+ * Ensure bugs table exists. Severity is HIGH, MID, LOW. State is OPEN, CLOSED.
+ * Creator is the username of the user who created the bug and never changes.
+ */
 export function initBugsTable(): void {
   db.exec(`
     CREATE TABLE IF NOT EXISTS bugs (
@@ -23,7 +26,8 @@ export function initBugsTable(): void {
       severity TEXT NOT NULL CHECK (severity IN ('HIGH', 'MID', 'LOW')),
       owner TEXT NOT NULL,
       description TEXT NOT NULL,
-      state TEXT NOT NULL DEFAULT 'OPEN' CHECK (state IN ('OPEN', 'CLOSED'))
+      state TEXT NOT NULL DEFAULT 'OPEN' CHECK (state IN ('OPEN', 'CLOSED')),
+      creator TEXT NOT NULL
     )
   `);
 }

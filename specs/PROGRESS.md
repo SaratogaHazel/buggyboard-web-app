@@ -131,4 +131,14 @@ Checklists are updated as each feature is completed. After each feature, the AI 
 
 ---
 
+## Feature: Bug creator (14-bug-creator.md)
+
+- [x] Spec written in `specs/features/`
+- [x] Backend implemented (creator column; createBug requires creator; updateBug preserves it; POST accepts creator, PUT ignores it; blank_creator error)
+- [x] Frontend implemented (CreateBugModal sends logged-in username as creator; Creator column right of Owner, sortable; Edit modal shows Creator read-only after Owner)
+- [x] Linter/errors resolved
+- [ ] Review done
+
+---
+
 _(Add one section per feature; copy the checklist template above.)_

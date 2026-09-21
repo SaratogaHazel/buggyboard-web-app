@@ -156,8 +156,9 @@ app.post("/api/bugs", (req, res) => {
   const severity = typeof body.severity === "string" ? body.severity : "";
   const owner = typeof body.owner === "string" ? body.owner : "";
   const description = typeof body.description === "string" ? body.description : "";
+  const creator = typeof body.creator === "string" ? body.creator : "";
 
-  const result = createBug({ title, severity: severity as "high" | "mid" | "low", owner, description });
+  const result = createBug({ title, severity, owner, description, creator });
 
   if (result.success) {
     res.status(201).json(result.bug);
@@ -177,6 +178,9 @@ app.post("/api/bugs", (req, res) => {
       return;
     case "BLANK_DESCRIPTION":
       res.status(400).json({ error: "blank_description", message: "Description is required." });
+      return;
+    case "BLANK_CREATOR":
+      res.status(400).json({ error: "blank_creator", message: "Creator is required." });
       return;
   }
 });
