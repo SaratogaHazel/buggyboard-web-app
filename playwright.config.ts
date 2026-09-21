@@ -5,7 +5,11 @@ import { defineConfig, devices } from "@playwright/test";
  * See specs/engineering/test-automation-patterns.md for test conventions.
  */
 
-/** Vite dev server port for the frontend. The backend runs on 3000 and is proxied via /api. */
+/**
+ * The Vite dev server serves the React frontend on port 5173 and proxies /api
+ * through to the Express backend on port 3000 (see frontend/vite.config.ts),
+ * so a single frontend base URL covers both the UI and the API.
+ */
 const FRONTEND_PORT = 5173;
 const BASE_URL = `http://localhost:${FRONTEND_PORT}`;
 
@@ -22,6 +26,7 @@ export default defineConfig({
     trace: "on-first-retry",
   },
 
+  /** Chromium only. Add further browser projects when the course calls for them. */
   projects: [
     {
       name: "chromium",
@@ -29,7 +34,7 @@ export default defineConfig({
     },
   ],
 
-  /** Start the frontend (Vite) and backend (Express) together before running tests. */
+  /** Start the frontend and backend together, then wait for the frontend to answer. */
   webServer: {
     command: "npm run dev",
     url: BASE_URL,
