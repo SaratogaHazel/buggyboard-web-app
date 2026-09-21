@@ -152,3 +152,5 @@ backend/data
 test-results/
 playwright-report/
 playwright/.cache/
+# Playwright CLI output (may contain credentials)
+.playwright-cli/
